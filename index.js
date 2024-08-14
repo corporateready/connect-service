@@ -33,7 +33,7 @@ function startAtSpecificTime(targetHour, targetMinute, targetSecond) {
   }, delay);
 }
 
-startAtSpecificTime(21, 40, 0);
+startAtSpecificTime(21, 44, 0);
 
 // async function getAllHistory() {
 //   try {
