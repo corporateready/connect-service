@@ -103,11 +103,11 @@ async function postDataToTinybird(data) {
 }
 
 async function requestNewData() {
-  setInterval(() => {
-    // console.log("new request!");
+  // setInterval(() => {
+  //   // console.log("new request!");
     checkByNewCall();
-    // console.log(getHistory)
-  }, [4000]);
+  //   // console.log(getHistory)
+  // }, [4000]);
   // console.log("new request!")
 }
 
