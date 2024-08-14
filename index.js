@@ -9,19 +9,12 @@ const app = express();
 
 app.use(express.json());
 
-async function transportingCallsData() {
-  try {
-    const res = await axios.get(
-      `https://binaagency.pbx.moldcell.md/sys/crm_api.wcgp?cmd=history&period=yesterday&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
+(async () => {
+//   // setInterval(async () =>{
+    try {
     const response = await axios.get(
-      `https://binaagency.pbx.moldcell.md/sys/crm_api.wcgp?cmd=history&period=yesterday&type=in&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
+      // `https://binaagency.pbx.moldcell.md/crm.ru/crm_integration.php?cmd=contact&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
+      `https://binaagency.pbx.moldcell.md/sys/crm.ru/crm_integration.php?cmd=event&type=INCOMING&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -29,42 +22,112 @@ async function transportingCallsData() {
       }
     );
 
-    // console.log("res length", res.data.length)
+    console.log('getEvent ', response.statusText)
+//     console.log("getEvent ", response.status);
 
-    // console.log(response.status);
-    // console.log(response.data);
+    if (response.status === 'OK') {
+      console.log("return ")
+      getAllHistory()
+    }
+//     // return response.statusText;
 
-    const csvData =
-      [
-        "UID",
-        "type",
-        "client",
-        "account",
-        "via",
-        "start",
-        "wait",
-        "duration",
-        "record",
-      ] +
-      "\n" +
-      [response.data];
-
-    Papa.parse(csvData, {
-      header: false,
-      complete: function (results) {
-        // console.log("res ", res.config)
-        // console.log("result item", results.data[1][0]);
-        results.data.forEach((item) => {
-          if (results && !res.data) {
-            postDataToTinybird(item);
-          }
-        });
-      },
-    });
-  } catch (error) {
+    } catch (error) {
     console.error("Error fetching data:", error);
   }
+  // },[10000])
+  
+})()
+
+async function getAllHistory() {
+ try {
+//    console.log(response.data);
+   const response = await axios.get(
+     `https://binaagency.pbx.moldcell.md/sys/crm_api.wcgp?cmd=history&period=today&type=in&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
+    //  `https://binaagency.pbx.moldcell.md/sys/crm_api.wcgp?cmd=history&period=today&type=in&limit=1&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
+     {
+       headers: {
+         "Content-Type": "application/json",
+       },
+     }
+   );
+  //  console.log("res length", res.data.length)
+  //  console.log(response.status);
+  //  console.log(response.data);
+   const csvData =
+     [
+       "UID",
+       "type",
+       "client",
+       "account",
+       "via",
+       "start",
+       "wait",
+       "duration",
+       "record",
+     ] +
+     "\n" +
+     [response.data];
+
+   Papa.parse(csvData, {
+     header: false,
+     complete: function (results) {
+       results.data.forEach((item) => {
+         if (results) {
+           postDataToTinybird(item);
+         }
+       });
+     },
+   });
+ } catch (error) {
+   console.error("Error fetching data:", error);
+ }
 }
+
+// getAllHistory()
+
+// async function transportingCallsData() {
+  // try {
+    
+    // console.log(response.data);
+    // const response = await axios.get(
+    //   `https://binaagency.pbx.moldcell.md/sys/crm_api.wcgp?cmd=history&period=today&type=in&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
+    // console.log("res length", res.data.length)
+    // console.log(response.status);
+    // console.log(response.data);
+    // const csvData =
+    //   [
+    //     "UID",
+    //     "type",
+    //     "client",
+    //     "account",
+    //     "via",
+    //     "start",
+    //     "wait",
+    //     "duration",
+    //     "record",
+    //   ] +
+    //   "\n" +
+    //   [response.data];
+    // Papa.parse(csvData, {
+    //   header: false,
+    //   complete: function (results) {
+    //     results.data.forEach((item) => {
+    //       if (results) {
+    //         postDataToTinybird(item);
+    //       }
+    //     });
+    //   },
+    // });
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
 
 async function postDataToTinybird(data) {
   await fetch(
@@ -72,15 +135,15 @@ async function postDataToTinybird(data) {
     {
       method: "POST",
       body: JSON.stringify({
-        UID: data[0],
-        type: data[1],
-        client: data[2],
-        account: data[3],
-        via: data[4],
-        start: data[5],
-        wait: data[6],
-        duration: data[7],
-        record: data[8],
+        "UID": data[0],
+        "type": data[1],
+        "client": data[2],
+        "account": data[3],
+        "via": data[4],
+        'start': data[5],
+        "wait": data[6],
+        "duration": data[7],
+        "record": data[8],
       }),
       headers: {
         Authorization:
@@ -89,10 +152,10 @@ async function postDataToTinybird(data) {
     }
   )
     .then((res) => res.json())
-    .then((data) => console.log(data));
+    .then((data) => console.log("data ", data));
 }
 
-transportingCallsData();
+// transportingCallsData();
 
 app.listen(3003, () => {
   console.log("Started server!");
