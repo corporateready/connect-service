@@ -102,17 +102,6 @@ async function postDataToTinybird(data) {
     .then((data) => console.log("data ", data));
 }
 
-async function requestNewData() {
-  // setInterval(() => {
-  //   // console.log("new request!");
-    checkByNewCall();
-  //   // console.log(getHistory)
-  // }, [4000]);
-  // console.log("new request!")
-}
-
-requestNewData();
-
 export const checkByNewCall = async () => {
     console.log("checkByNewCall is started!");
   // try {
@@ -167,3 +156,14 @@ export const checkByNewCall = async () => {
   //   console.error("Error fetching data:", error);
   // }
 };
+
+async function requestNewData() {
+  // setInterval(() => {
+  //   // console.log("new request!");
+    checkByNewCall();
+  //   // console.log(getHistory)
+  // }, [4000]);
+  // console.log("new request!")
+}
+
+requestNewData();
