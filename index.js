@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 let refreshToken = process.env.NODEJS_REFRESH_TOKEN;
-startAccessToken(refreshToken);
+
 
 setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 
@@ -65,4 +65,5 @@ app.post("/", async (req, res) => {
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
+  startAccessToken(refreshToken);
 });
