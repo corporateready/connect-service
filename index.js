@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 let refreshToken = process.env.NODEJS_REFRESH_TOKEN;
 
 
-setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
+
 
 // generateTokens(
 //   "1000.ec50a6d17c8f5989384ef504f7877d3c.7731d73285821a47aaea3cb7087e7038"
@@ -66,4 +66,5 @@ app.post("/", async (req, res) => {
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
   startAccessToken(refreshToken);
+  setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 });
