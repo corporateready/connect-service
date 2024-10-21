@@ -1,155 +1,68 @@
-import dotenv from "dotenv";
 import express from "express";
-import axios from "axios";
-import { getAllHistory } from "./getAllHistory.js";
-import {checkByNewCall} from "./getAllHistory.js";
+import "dotenv/config.js";
+import { createClient } from "@supabase/supabase-js";
+import morgan from "morgan";
+import bodyParser from "body-parser";
+import updateAccessToken from "./service/supabase/data-features/updateAccessToken.js";
+import startAccessToken from "./service/supabase/data-features/startAccessToken.js";
+import handleRudderStackEvent from "./service/rudderstack/handleRudderStackEvent.js";
 
-dotenv.config();
+// import refreshAccessToken from "./service/createRefreshToken.js";
+
+import postNewContact from "./service/postNewContact.js";
+
+// import postNewRoistatCall from "./service/postNewCallToZoho.js";
+// import tokenId from "./service/database/get-data-functions/getTokenId.js";
+
+import createRistatCallData from "./service/supabase/data-features/createRistatCallData.js";
+import lengthCollectionEvent from "./service/pbx/length-collection-event/lengthCollectionEvent.js";
+import getPBXAccounts from "./service/pbx/getPBXAccounts.js";
+
 
 const app = express();
+const port = 3003;
 
-app.use(express.json());
+const supabaseUrl = process.env.NODEJS_SUPABASE_URL;
+const supabaseKey = process.env.NODEJS_SUPABASE_API_KEY;
 
-function startAtSpecificTime(targetHour, targetMinute, targetSecond) {
-  const now = new Date();
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const targetTime = new Date();
-  targetTime.setHours(targetHour, targetMinute, targetSecond, 0);
+app.use(morgan("combined"));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-  let delay = targetTime.getTime() - now.getTime();
+let refreshToken = process.env.NODEJS_REFRESH_TOKEN;
+// startAccessToken(refreshToken);
 
-  console.log("delay ", delay);
+setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 
-  if (delay < 0) {
-    targetTime.setDate(targetTime.getDate() + 1);
-    delay = targetTime.getTime() - now.getTime();
-  }
-
-  if (delay < 0) {
-  }
-
-  setTimeout(() => {
-    getAllHistory();
-  }, delay);
-}
-
-startAtSpecificTime(18, 59, 0);
-
-// async function getAllHistory() {
-//   try {
-//     //    console.log(response.data);
-//     const response = await axios.get(
-//       //  `https://binaagency.pbx.moldcell.md/sys/crm_api.wcgp?cmd=history&period=today&type=in&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
-//       `https://binaagency.pbx.moldcell.md/sys/crm_api.wcgp?cmd=history&period=today&type=in&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
-//       {
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-//     //  console.log("res length", res.data.length)
-//     //  console.log(response.status);
-//     //  console.log(response.data);
-//     const csvData =
-//       [
-//         "UID",
-//         "type",
-//         "client",
-//         "account",
-//         "via",
-//         "start",
-//         "wait",
-//         "duration",
-//         "record",
-//       ] +
-//       "\n" +
-//       [response.data];
-
-//     Papa.parse(csvData, {
-//       header: false,
-//       complete: function (results) {
-//         results.data.forEach((item) => {
-//           if (results) {
-//             postDataToTinybird(item);
-//           }
-//         });
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// }
-
-// async function transportingCallsData() {
-// try {
-
-// console.log(response.data);
-// const response = await axios.get(
-//   `https://binaagency.pbx.moldcell.md/sys/crm_api.wcgp?cmd=history&period=today&type=in&token=a92bd86d-cbbd-4d53-a550-7fc2f7ca62de`,
-//   {
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   }
+// generateTokens(
+//   "1000.ec50a6d17c8f5989384ef504f7877d3c.7731d73285821a47aaea3cb7087e7038"
 // );
-// console.log("res length", res.data.length)
-// console.log(response.status);
-// console.log(response.data);
-// const csvData =
-//   [
-//     "UID",
-//     "type",
-//     "client",
-//     "account",
-//     "via",
-//     "start",
-//     "wait",
-//     "duration",
-//     "record",
-//   ] +
-//   "\n" +
-//   [response.data];
-// Papa.parse(csvData, {
-//   header: false,
-//   complete: function (results) {
-//     results.data.forEach((item) => {
-//       if (results) {
-//         postDataToTinybird(item);
-//       }
-//     });
-//   },
-// });
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// }
 
-// async function postDataToTinybird(data) {
-//   await fetch(
-//     "https://api.eu-central-1.aws.tinybird.co/v0/events?name=pbx__data_ds",
-//     {
-//       method: "POST",
-//       body: JSON.stringify({
-//         UID: data[0],
-//         type: data[1],
-//         client: data[2],
-//         account: data[3],
-//         via: data[4],
-//         start: data[5],
-//         wait: data[6],
-//         duration: data[7],
-//         record: data[8],
-//       }),
-//       headers: {
-//         Authorization:
-//           "Bearer p.eyJ1IjogIjE5MWViZjUyLTFlYmUtNDk0NS05YmVmLTNmZGUzYjk4ZjNmMyIsICJpZCI6ICIyNzI3NzBlNy1jNWM3LTRlYjgtYTZhZS04YTA2ODZhNzdjYzciLCAiaG9zdCI6ICJhd3MtZXUtY2VudHJhbC0xIn0.2B5cg_5SUIbcI_aYd3yheARoIHuUb1tH2BaOgclzNvM",
-//       },
-//     }
-//   )
-//     .then((res) => res.json())
-//     .then((data) => console.log("data ", data));
-// }
+app.post("/", async (req, res) => {
+  try {
+    const userId = req.body.userId;
 
-app.listen(3003, () => {
-  console.log("Started server!");
+    if (userId === "form_submitted") {
+      console.log("Incoming Form Submit...");
+      const eventData = req.body;
+      const result = postNewContact(eventData);
+      res.status(200).json(result);
+    } else {
+      const eventData = req.body;
+      console.log("Incoming call...");
+      // createRistatCallData(eventData);
+      const callResult = lengthCollectionEvent(eventData);
+
+      res.status(200).json(callResult);
+    }
+  } catch (error) {
+    console.error("Error processing event:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.listen(port, async () => {
+  console.log(`Server is running on port ${port}`);
 });

@@ -1,0 +1,12 @@
+{
+  "client_id": "1000.SKXPGAACQHTAEKB0L18ZM2ANO9FQZG",
+  "client_secret": "76133cbbde1b028778147cf8cf879a18900e558553",
+  "redirect_uri": "https://accounts.zoho.eu",
+  "currentUserEmail": "nev30inbox@gmail.com",
+  "token_persistence_path": "YOUR_TOKEN_PATH",
+  "apiBaseUrl": "https://www.zohoapis.eu",
+  "apiVersion": "v2",
+  "logFilePath": "zcrm_sdk_log.log",
+  "refresh_token":"1000.03cb7baa2d02068bdbb35189653e6a67.ade73ae1c2212dbf294d74b65fe40cb6",
+  "access_token":"1000.e805d8c1bd6e458edb12c9b4f4e1ca69.215eb3c820ea9bd0350e70da31c11af2"
+}

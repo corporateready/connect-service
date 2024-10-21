@@ -1,0 +1,16 @@
+{
+  "Call_Duration": null,
+      "Owner": "",
+      "Description": null,
+      "$currency_symbol": "MDL",
+      "Caller_ID": null,
+      "id": "732174000000429423",
+      "Call_Status": "Overdue",
+      "Created_Time": "2024-09-04T13:53:55+03:00",
+      "Call_Start_Time": "2024-09-04T15:53:55+03:00",
+      "Subject": "Follow up with Lead",
+      "Call_Type": "Исходящий",
+      "Call_Result": null,
+      "Call_Duration_in_seconds": null,
+      "Dialled_Number": null
+}

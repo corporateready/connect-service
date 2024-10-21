@@ -1,0 +1,95 @@
+{
+    "body": {
+        "XML": {},
+        "FORM": {},
+        "JSON": {
+            "type": "track",
+            "event": "form_submitted",
+            "sentAt": "2024-09-03T11:42:59.210Z",
+            "userId": "form_data",
+            "channel": "web",
+            "context": {
+                "ip": "62.221.72.65",
+                "os": {
+                    "name": "",
+                    "version": ""
+                },
+                "app": {
+                    "name": "RudderLabs JavaScript SDK",
+                    "version": "3.5.1",
+                    "namespace": "com.rudderlabs.javascript",
+                    "installType": "npm"
+                },
+                "page": {
+                    "url": "https://artima.md/",
+                    "path": "/",
+                    "title": "Oficii spre chirie ARTIMA Business & Lifestyle",
+                    "search": "",
+                    "tab_url": "https://artima.md/",
+                    "referrer": "https://artima.md/",
+                    "initial_referrer": "$direct",
+                    "referring_domain": "artima.md",
+                    "initial_referring_domain": ""
+                },
+                "locale": "ru-RU",
+                "screen": {
+                    "width": 3008,
+                    "height": 1692,
+                    "density": 2,
+                    "innerWidth": 1421,
+                    "innerHeight": 780
+                },
+                "traits": {
+                    "name": "test name 17",
+                    "email": "test17@gmail.com",
+                    "phone": "+37368969177",
+                    "location": "Tiraspol"
+                },
+                "library": {
+                    "name": "RudderLabs JavaScript SDK",
+                    "version": "3.5.1",
+                    "snippetVersion": "3.0.14"
+                },
+                "campaign": {},
+                "timezone": "GMT+0300",
+                "sessionId": 1725363530678,
+                "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+                "sessionStart": true
+            },
+            "rudderId": "8aecb108-372a-402b-983c-6a2598b6371b",
+            "messageId": "0ac5b18b-d956-41e1-a333-739634180990",
+            "timestamp": "2024-09-03T11:42:48.870Z",
+            "properties": {
+                "name": "test name 17",
+                "email": "test17@gmail.com",
+                "phone": "+37368969177",
+                "location": "Tiraspol",
+                "form_name": "descarca_prezentare_pdf_ro",
+                "form_type": "click_form",
+                "action_type": "click",
+                "element_text": "trimite",
+                "element_type": "button",
+                "form_location": "hero",
+                "element_location": "bottom_form"
+            },
+            "receivedAt": "2024-09-03T11:42:59.576Z",
+            "request_ip": "62.221.72.65",
+            "anonymousId": "dea37139-b4f7-46ce-bfab-2c95785e0d2a",
+            "integrations": {
+                "All": true
+            },
+            "originalTimestamp": "2024-09-03T11:42:48.504Z"
+        },
+        "JSON_ARRAY": {}
+    },
+    "type": "REST",
+    "files": {},
+    "method": "POST",
+    "params": {},
+    "userId": "dea37139-b4f7-46ce-bfab-2c95785e0d2a",
+    "headers": {
+        "content-type": "application/json"
+    },
+    "version": "1",
+    "endpoint": "https://d0a1-62-221-72-65.ngrok-free.app/rudderstack-webhook"
+}
