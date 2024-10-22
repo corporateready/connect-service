@@ -1,15 +1,14 @@
 import express from "express";
 import "dotenv/config.js";
-// import { createClient } from "@supabase/supabase-js";
 import morgan from "morgan";
 import bodyParser from "body-parser";
-import EventEmitter from "events"
+import EventEmitter from "events";
 import updateAccessToken from "./service/supabase/data-features/updateAccessToken.js";
 import startAccessToken from "./service/supabase/data-features/startAccessToken.js";
 import postNewContact from "./service/postNewContact.js";
 import lengthCollectionEvent from "./service/pbx/length-collection-event/lengthCollectionEvent.js";
 
-const eventEmitter = new EventEmitter()
+const eventEmitter = new EventEmitter();
 const app = express();
 const port = 3003;
 
@@ -20,15 +19,16 @@ app.use(bodyParser.json());
 const refreshToken = process.env.NODEJS_REFRESH_TOKEN;
 
 function myFunction() {
-  startAccessToken(refreshToken);
- 
+  console.log("Application is start...!")
+  // startAccessToken(refreshToken);
 }
 
-eventEmitter.once('myEvent', myFunction);
+eventEmitter.on("myEvent", myFunction);
 
-eventEmitter.emit('myEvent');
+eventEmitter.emit("myEvent");
 
-setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
+// setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
+setInterval(() => console.log("Token refreshed...!"), 10 * 1000);
 
 app.post("/", async (req, res) => {
   try {
