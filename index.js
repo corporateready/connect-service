@@ -17,11 +17,10 @@ app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// const refreshToken = process.env.NODEJS_REFRESH_TOKEN;
+const refreshToken = process.env.NODEJS_REFRESH_TOKEN;
 
 function myFunction() {
-  console.log("Application was started...!")
-  // startAccessToken(refreshToken);
+  startAccessToken(refreshToken);
  
 }
 
@@ -29,7 +28,7 @@ eventEmitter.once('myEvent', myFunction);
 
 eventEmitter.emit('myEvent');
 
- setInterval(() => console.log("Refreshed...!"), 10 * 1000);
+setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 
 app.post("/", async (req, res) => {
   try {
