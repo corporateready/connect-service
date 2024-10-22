@@ -20,15 +20,14 @@ const refreshToken = process.env.NODEJS_REFRESH_TOKEN;
 
 function myFunction() {
   console.log("Application is start...!")
-  // startAccessToken(refreshToken);
+  return startAccessToken(refreshToken);
 }
 
 eventEmitter.on("myEvent", myFunction);
 
 eventEmitter.emit("myEvent");
 
-// setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
-setInterval(() => console.log("Token refreshed...!"), 10 * 1000);
+setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 
 app.post("/", async (req, res) => {
   try {
