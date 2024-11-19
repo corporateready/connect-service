@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createClient } from "@supabase/supabase-js";
 import "dotenv/config";
-import postNewCalls from "./postNewCalls.js";
 
 const supabaseUrl = process.env.NODEJS_SUPABASE_URL;
 const supabaseKey = process.env.NODEJS_SUPABASE_API_KEY;

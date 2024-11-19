@@ -41,7 +41,6 @@ export default async function Index() {
         header: true,
         complete: async function (results) {
           let namePart = results.data[0].account.split("@")[0];
-
           let nameArray = namePart.split("_");
 
           let formattedName = nameArray

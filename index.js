@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 const refreshToken = process.env.NODEJS_REFRESH_TOKEN;
 
 function myFunction() {
-  console.log("Application is start...!")
+  console.log("Event worked!");
   return startAccessToken(refreshToken);
 }
 
@@ -27,24 +27,26 @@ eventEmitter.on("myEvent", myFunction);
 
 eventEmitter.emit("myEvent");
 
-setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
+// setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 
 app.post("/", async (req, res) => {
   try {
     const userId = req.body.userId;
+    const eventName = req.body.event;
 
     if (userId === "form_submitted") {
       console.log("Incoming Form Submit...");
       const eventData = req.body;
       const result = postNewContact(eventData);
       res.status(200).json(result);
-    } else {
+    }
+    if (eventName === "webhook_source_event") {
       const eventData = req.body;
       console.log("Incoming call...");
       const callResult = lengthCollectionEvent(eventData);
-
       res.status(200).json(callResult);
     }
+    return;
   } catch (error) {
     console.error("Error processing event:", error);
     res.status(500).send("Internal Server Error");
@@ -53,4 +55,5 @@ app.post("/", async (req, res) => {
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
+  setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 });
