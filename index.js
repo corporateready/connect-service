@@ -26,20 +26,12 @@ eventEmitter.on("myEvent", myFunction);
 
 eventEmitter.emit("myEvent");
 
-function myFunction() {
-  return startAccessToken(refreshToken);
-}
-
-eventEmitter.on("myEvent", myFunction);
-
-eventEmitter.emit("myEvent");
-
 function startHourlyTask() {
+  
   setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 }
 
 startHourlyTask();
-// setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 
 app.post("/", async (req, res) => {
   try {
