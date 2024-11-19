@@ -19,7 +19,6 @@ app.use(bodyParser.json());
 const refreshToken = process.env.NODEJS_REFRESH_TOKEN;
 
 function myFunction() {
-  console.log("Event worked!");
   return startAccessToken(refreshToken);
 }
 
@@ -27,7 +26,20 @@ eventEmitter.on("myEvent", myFunction);
 
 eventEmitter.emit("myEvent");
 
-setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
+function myFunction() {
+  return startAccessToken(refreshToken);
+}
+
+eventEmitter.on("myEvent", myFunction);
+
+eventEmitter.emit("myEvent");
+
+function startHourlyTask() {
+  setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
+}
+
+startHourlyTask();
+// setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 
 app.post("/", async (req, res) => {
   try {
