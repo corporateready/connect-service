@@ -27,7 +27,7 @@ eventEmitter.on("myEvent", myFunction);
 
 eventEmitter.emit("myEvent");
 
-// setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
+setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 
 app.post("/", async (req, res) => {
   try {
@@ -55,5 +55,4 @@ app.post("/", async (req, res) => {
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
-  setInterval(() => updateAccessToken(refreshToken), 3500 * 1000);
 });
