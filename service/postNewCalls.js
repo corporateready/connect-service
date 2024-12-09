@@ -31,6 +31,7 @@ export default async function Index(filtered) {
             Accepted_Person: filtered[0].account,
             Phone: `+${filtered[0].client}`,
             Link_Voice_Record: filtered[0].record,
+            PBX_Department: "ARTIMA",
           },
         ],
       },
