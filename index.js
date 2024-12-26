@@ -1,4 +1,5 @@
 import express from "express";
+import axios from "axios";
 import "dotenv/config.js";
 import morgan from "morgan";
 import bodyParser from "body-parser";
@@ -7,6 +8,7 @@ import updateAccessToken from "./service/supabase/data-features/updateAccessToke
 import startAccessToken from "./service/supabase/data-features/startAccessToken.js";
 import postNewContact from "./service/postNewContact.js";
 import lengthCollectionEvent from "./service/pbx/length-collection-event/lengthCollectionEvent.js";
+import { PostHog } from "posthog-node";
 
 const eventEmitter = new EventEmitter();
 const app = express();
@@ -33,6 +35,14 @@ function startHourlyTask() {
 
 startHourlyTask();
 
+const posthog = new PostHog("phc_v2HcUOBJx1tfJJpA37ipBy9lDvMwRPzrqxT3m4NetAP", {
+  host: "https://eu.i.posthog.com", // Замените, если используете собственный хост PostHog
+});
+
+process.on("exit", () => {
+  posthog.shutdown();
+});
+
 app.post("/", async (req, res) => {
   try {
     const userId = req.body.userId;
@@ -46,8 +56,14 @@ app.post("/", async (req, res) => {
     }
     if (eventName === "webhook_source_event") {
       const eventData = req.body;
+      const googleClientId = eventData.properties.google_client_id;
       console.log("Incoming call...");
-      const callResult = lengthCollectionEvent(eventData);
+
+        posthog.capture({
+          distinctId: googleClientId || "anonymous",
+          event: eventName,
+        });
+      const callResult = lengthCollectionEvent(eventData,googleClientId);
       res.status(200).json(callResult);
     }
     return;
@@ -58,5 +74,5 @@ app.post("/", async (req, res) => {
 });
 
 app.listen(port, async () => {
-  console.log(`Server is running on this port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
