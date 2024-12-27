@@ -36,7 +36,7 @@ function startHourlyTask() {
 startHourlyTask();
 
 const posthog = new PostHog("phc_v2HcUOBJx1tfJJpA37ipBy9lDvMwRPzrqxT3m4NetAP", {
-  host: "https://eu.i.posthog.com", // Замените, если используете собственный хост PostHog
+  host: "https://eu.i.posthog.com",
 });
 
 process.on("exit", () => {
@@ -46,6 +46,7 @@ process.on("exit", () => {
 app.post("/", async (req, res) => {
   try {
     const userId = req.body.userId;
+    const { event, properties } = req.body;
     const eventName = req.body.event;
 
     if (userId === "form_submitted") {
@@ -56,14 +57,17 @@ app.post("/", async (req, res) => {
     }
     if (eventName === "webhook_source_event") {
       const eventData = req.body;
-      const googleClientId = eventData.properties.google_client_id;
       console.log("Incoming call...");
 
-        posthog.capture({
-          distinctId: googleClientId || "anonymous",
-          event: eventName,
-        });
-      const callResult = lengthCollectionEvent(eventData,googleClientId);
+      const { google_client_id, ...rest } = properties;
+      posthog.capture({
+        distinctId: google_client_id || "anonymous",
+        event: event,
+        properties: rest,
+      });
+
+      const callResult = lengthCollectionEvent(eventData);
+      
       res.status(200).json(callResult);
     }
     return;
