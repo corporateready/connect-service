@@ -62,7 +62,7 @@ app.post("/", async (req, res) => {
       const { google_client_id, ...rest } = properties;
       posthog.capture({
         distinctId: google_client_id || "anonymous",
-        event: event,
+        event: "Incoming Call",
         properties: rest,
       });
 
